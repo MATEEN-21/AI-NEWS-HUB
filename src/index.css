@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    scroll-behavior: smooth;
+  }
+}
+
+.font-editorial {
+  font-family: 'Newsreader', Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+/* Crisp prose styles for reading */
+.prose-editorial {
+  font-family: 'Newsreader', Georgia, Cambria, serif;
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: #1e293b;
+}
+
+.prose-editorial h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 2rem;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.02em;
+}
+
+.prose-editorial h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-editorial p {
+  margin-bottom: 1.35rem;
+}
+
+.prose-editorial ul, .prose-editorial ol {
+  margin-bottom: 1.35rem;
+  padding-left: 1.5rem;
+}
+
+.prose-editorial li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-editorial blockquote {
+  border-left: 3px solid #2563eb;
+  padding-left: 1.25rem;
+  margin: 1.75rem 0;
+  font-style: italic;
+  color: #334155;
+}
+
+.prose-editorial code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  background-color: #f1f5f9;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  color: #0f172a;
+}
+
+/* Clean CSS hover lift effects (smooth scale and soft shadow) */
+.card-hover-lift {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-4px) scale(1.006);
+  box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.12), 0 6px 16px -4px rgba(15, 23, 42, 0.06);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.card-hover-lift-subtle {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+.card-hover-lift-subtle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px -5px rgba(15, 23, 42, 0.1), 0 3px 8px -2px rgba(15, 23, 42, 0.05);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Subtle pulsing glow animation for primary action buttons */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 18px 3px rgba(37, 99, 235, 0.38), 0 0 4px 1px rgba(6, 182, 212, 0.35);
+  }
+}
+
+.btn-glow-pulse {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+.btn-glow-pulse:hover {
+  animation: none;
+  box-shadow: 0 0 22px 4px rgba(37, 99, 235, 0.55);
+}
+
+/* Modern shimmer placeholder animation */
+@keyframes shimmerAnimation {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #f1f5f9;
+}
+
+.shimmer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.65) 20%,
+    rgba(255, 255, 255, 0.85) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmerAnimation 1.6s infinite ease-in-out;
+  content: '';
+}
+
+/* Smooth CSS fade-in animation for content mounting */
+@keyframes fadeInContent {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInContent 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+

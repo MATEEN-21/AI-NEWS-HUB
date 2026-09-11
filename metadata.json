@@ -1,0 +1,6 @@
+{
+  "name": "AI Tech Hub",
+  "description": "A modern, lightweight, fast-loading editorial platform for AI news, technology breakthroughs, articles, guides, and AI tool directories.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

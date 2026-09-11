@@ -1,0 +1,488 @@
+{
+  "isConfigured": false,
+  "recoveryCode": "ATH-924A-C71B",
+  "users": [],
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "AI News",
+      "slug": "ai-news",
+      "description": "Breaking dispatches, foundation model releases, and AI industry shifts."
+    },
+    {
+      "id": "cat-2",
+      "name": "Tech News",
+      "slug": "tech-news",
+      "description": "Semiconductor updates, cloud infrastructure, and frontier computing developments."
+    },
+    {
+      "id": "cat-3",
+      "name": "AI Tools",
+      "slug": "ai-tools",
+      "description": "Curated directory and breakdown of cutting-edge artificial intelligence software."
+    },
+    {
+      "id": "cat-4",
+      "name": "Tutorials",
+      "slug": "tutorials",
+      "description": "Step-by-step engineering walk-throughs for developers and practitioners."
+    },
+    {
+      "id": "cat-5",
+      "name": "Reviews",
+      "slug": "reviews",
+      "description": "Rigorous hands-on benchmarking of consumer and enterprise AI technologies."
+    },
+    {
+      "id": "cat-6",
+      "name": "AI Guides",
+      "slug": "ai-guides",
+      "description": "Strategic overviews, implementation frameworks, and best practices."
+    },
+    {
+      "id": "cat-7",
+      "name": "AI Trends",
+      "slug": "ai-trends",
+      "description": "Macro analyses of economic impact, open-source momentum, and future outlooks."
+    }
+  ],
+  "articles": [
+    {
+      "id": "art-1",
+      "title": "Next-Generation Reasoning Models: How Test-Time Compute is Transforming AI Inference",
+      "slug": "next-generation-reasoning-models-test-time-compute",
+      "summary": "A deep investigation into how scaling reinforcement learning during inference allows frontier models to verify intermediate thoughts, solve complex proofs, and minimize hallucination.",
+      "content": "## The Paradigm Shift in Neural Inference\n\nFor over five years, the scaling laws of deep learning were governed almost exclusively by pre-training compute. Laboratories invested hundreds of millions of dollars into clustering tens of thousands of GPUs to train increasingly massive parameter models.\n\nHowever, during recent benchmark evaluations across mathematical synthesis, competitive coding, and multi-step theorem proving, a new dimension of scaling has eclipsed sheer parameter count: **test-time compute**.\n\n### Understanding Test-Time Verification\n\nRather than spitting out token-by-token completions with a single forward pass, modern reasoning architectures employ iterative chain-of-thought exploration coupled with process reward models (PRMs). \n\n> \"Scaling inference compute allows models to perform internal backtracking, hypothesize test cases, and self-correct before presenting the final answer.\"\n\nWhen confronted with an ambiguous query or a rigorous logic problem, the system:\n1. **Generates multiple candidate deduction trees** in parallel.\n2. **Evaluates validity at each discrete step** rather than evaluating only the final outcome.\n3. **Prunes dead-end derivations** and allocates additional computational budget to promising paths.\n\n### Practical Benchmarks & Latency Tradeoffs\n\nWhile inference latency increases from 350ms to upwards of 8-15 seconds for difficult queries, the accuracy leap is staggering:\n- **Olympiad Mathematics:** 84% accuracy improvement over standard one-shot prompting.\n- **Formal Code Verification:** 62% reduction in unhandled edge cases during unit test synthesis.\n- **Biomedical Paper Synthesis:** 45% decrease in fabricated citations.\n\n### What This Means for Developers\n\nFor software architects building production AI applications, the implication is clear: pipeline design must pivot from single-turn API calls to asynchronous reasoning workers. User interfaces should visually convey background deliberation through discreet progress indicators rather than freezing or abruptly streaming unrefined output.",
+      "category": "AI News",
+      "tags": [
+        "Reasoning Models",
+        "LLMs",
+        "Hardware & Silicon"
+      ],
+      "author": {
+        "name": "Dr. Sarah Vance",
+        "role": "Chief AI Research Editor",
+        "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-08T10:00:00Z",
+      "readingTime": "6 min read",
+      "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Visualizing multi-step reasoning pathways within deep transformer networks.",
+      "isFeatured": true,
+      "isTrending": true,
+      "isDraft": false,
+      "isNews": true,
+      "views": 14202,
+      "recommendedTools": [
+        "tool-cursor",
+        "tool-perplexity"
+      ]
+    },
+    {
+      "id": "art-2",
+      "title": "Open-Weight Ecosystems in 2026: Can Commodity Hardware Match Proprietary Clouds?",
+      "slug": "open-weight-ecosystems-commodity-hardware-match-clouds",
+      "summary": "With 4-bit quantization, speculative decoding, and native NPU acceleration, local AI inference on developer workstations is closing the capability gap.",
+      "content": "## The Democratization of Frontier Weights\n\nThe past twelve months have seen unprecedented acceleration in open-weight models. What once required an 8x H100 server rack can now run comfortably on unified-memory laptops equipped with 64GB to 128GB of RAM.\n\n### Architectural Optimizations Driving the Shift\n\nThree pivotal engineering breakthroughs have made local execution viable for enterprise workloads:\n- **Grouped-Query Attention (GQA):** Dramatically reduces KV-cache memory footprints, allowing context windows of up to 128k tokens without memory exhaustion.\n- **Dynamic 4-Bit ExLlamaV2 and AWQ Kernels:** Retain over 98.4% of FP16 perplexity while slashing memory consumption by a factor of 3.8x.\n- **Speculative Drafting:** Utilizing small 1B-parameter draft models to predict tokens validated by the primary 32B model, boosting generation speed to over 45 tokens per second on consumer silicon.\n\n### Privacy and Sovereign Infrastructure\n\nFor healthcare providers, defense contractors, and financial analysts, the ability to operate offline without transmitting sensitive telemetry over public clouds provides an insurmountable regulatory advantage.",
+      "category": "AI Trends",
+      "tags": [
+        "Open Weights",
+        "Edge AI",
+        "Enterprise"
+      ],
+      "author": {
+        "name": "Elena Rostova",
+        "role": "Infrastructure & Hardware Analyst",
+        "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-07T14:30:00Z",
+      "readingTime": "5 min read",
+      "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Compact localized inference engines running on custom silicon boards.",
+      "isFeatured": true,
+      "isTrending": true,
+      "isDraft": false,
+      "isNews": false,
+      "views": 9800,
+      "recommendedTools": [
+        "tool-cursor"
+      ]
+    },
+    {
+      "id": "art-3",
+      "title": "Cursor AI Code Editor Benchmark Review: Does It Truly 10x Developer Throughput?",
+      "slug": "cursor-ai-code-editor-benchmark-review",
+      "summary": "We spent four weeks building a production distributed service exclusively inside Cursor. Here is our rigorous breakdown of its context engine, Composer mode, and real-world developer economics.",
+      "content": "## The Developer Workspace Reimagined\n\nDeveloper tooling has transitioned from static syntax autocompletion to collaborative agentic software engineering. Cursor, built as a precision fork of VS Code, has emerged as the premier environment for engineers seeking deep repo comprehension.\n\n### Deep Repository Indexing\n\nUnlike standalone web chat assistants, Cursor generates continuous semantic vector embeddings of your entire codebase. When asking questions like *\"Where is our Stripe webhook signature verified?\"*, the editor pinpoints the exact middleware handler in milliseconds.\n\n### Testing Composer Mode on Real Projects\n\nDuring our evaluation, we tested Cursor against three challenging engineering tasks:\n1. **Refactoring an Express API to Async Generators:** Completed in 3 minutes with zero syntax oversights.\n2. **Writing Complex Unit Tests for Concurrent Mutexes:** Generated 14 passing Jest tests covering race conditions.\n3. **Database Migration Script Generation:** Correctly extracted schema delta definitions from Drizzle models.\n\n### Verdict: 9.4 / 10\n\nCursor represents the gold standard of developer AI integration. It respects developer autonomy while eliminating repetitive boilerplate.",
+      "category": "Reviews",
+      "tags": [
+        "Autonomous Agents",
+        "LLMs"
+      ],
+      "author": {
+        "name": "Marcus Brody",
+        "role": "Senior Staff Software Engineer",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-06T09:15:00Z",
+      "readingTime": "7 min read",
+      "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Hands-on evaluation of interactive AI coding environments.",
+      "isFeatured": true,
+      "isTrending": true,
+      "isDraft": false,
+      "isNews": false,
+      "views": 18500,
+      "recommendedTools": [
+        "tool-cursor",
+        "tool-claude"
+      ]
+    },
+    {
+      "id": "art-4",
+      "title": "Building Production Agentic RAG Systems: A Step-by-Step Architecture Guide",
+      "slug": "building-production-agentic-rag-systems-tutorial",
+      "summary": "A hands-on tutorial detailing recursive query decomposition, contextual re-ranking, and self-corrective retrieval loops for high-accuracy enterprise search.",
+      "content": "## Beyond Naive Vector Search\n\nNaive Retrieval-Augmented Generation (RAG)—chunking text, calculating cosine similarity, and stuffing retrieved chunks into an LLM context window—fails in enterprise deployments. It suffers from context dilution, misplaced ranking, and silence on semantic edge cases.\n\n### The Agentic RAG Architecture\n\nAgentic RAG transforms information retrieval from a one-shot pipeline into an autonomous research loop.\n\n#### Step 1: Query Routing & Decomposition\nWhen a user submits a multi-faceted question:\n```\n\"Compare our Q3 gross margins against European compliance directives\"\n```\nThe agent decomposes this into two discrete parallel searches: financial ledger databases and regulatory compliance documentation.\n\n#### Step 2: Cohere or BGE Cross-Encoder Re-ranking\nVector embeddings approximate broad topical alignment. A cross-encoder neural model scores the top 50 retrieved snippets against the query text directly, discarding 80% of noise.\n\n#### Step 3: Self-Correction & Verification Loop\nIf the retrieved documents lack sufficient factual support, the agent issues an automated refinement query rather than hallucinating an answer.",
+      "category": "Tutorials",
+      "tags": [
+        "Autonomous Agents",
+        "Enterprise",
+        "LLMs"
+      ],
+      "author": {
+        "name": "Marcus Brody",
+        "role": "Senior Staff Software Engineer",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-05T11:20:00Z",
+      "readingTime": "8 min read",
+      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Production-ready architecture diagram for agentic retrieval pipelines.",
+      "isFeatured": false,
+      "isTrending": false,
+      "isDraft": false,
+      "isNews": false,
+      "views": 7400,
+      "recommendedTools": [
+        "tool-perplexity"
+      ]
+    },
+    {
+      "id": "art-5",
+      "title": "Silicon Giants Unveil 2nm AI Accelerators: Memory Bandwidth Takes Center Stage",
+      "slug": "silicon-giants-unveil-2nm-ai-accelerators-memory-bandwidth",
+      "summary": "Next-generation semiconductor fabs are moving toward High Bandwidth Memory 4 (HBM4) and optical interconnects to overcome the memory wall.",
+      "content": "## The Von Neumann Memory Wall\n\nWhile floating-point matrix arithmetic units have scaled exponentially over the past four years, the real bottleneck of modern deep learning has remained steadfast: memory bandwidth. \n\nFeeding hundreds of billions of parameters across multi-die packages requires data transfer speeds measuring in tens of terabytes per second.\n\n### The Arrival of Co-Packaged Optics\n\nLeading chip foundries have revealed optical I/O chiplets integrated directly onto the substrate alongside memory stacks. By replacing copper traces with microscopic laser photonic links, interconnect power dissipation drops by 70% while inter-chip throughput expands fivefold.",
+      "category": "Tech News",
+      "tags": [
+        "Hardware & Silicon",
+        "Enterprise"
+      ],
+      "author": {
+        "name": "Elena Rostova",
+        "role": "Infrastructure & Hardware Analyst",
+        "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-04T16:00:00Z",
+      "readingTime": "4 min read",
+      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Wafer-scale integration and high-bandwidth optical interconnects.",
+      "isFeatured": false,
+      "isTrending": false,
+      "isDraft": false,
+      "isNews": true,
+      "views": 6100,
+      "recommendedTools": []
+    },
+    {
+      "id": "art-6",
+      "title": "Frontier Multimodal Reasoning: Comparing Visual Synthesis Across Flagship Models",
+      "slug": "frontier-reasoning-models-visual-synthesis-review",
+      "summary": "An exhaustive side-by-side comparison of image comprehension, technical schematic parsing, and OCR precision across the top three multimodal foundations.",
+      "content": "## Testing the Limits of Multimodal Perception\n\nCan current vision-language models accurately interpret circuit diagrams, surgical pathology scans, and complex geometric puzzles? We designed a rigorous 50-item evaluation benchmark.\n\n### Key Findings:\n- **Circuit Schematic Parsing:** High-resolution patch encoders correctly resolved 91% of component pins and bus labels.\n- **Handwritten Table Extraction:** Character-level accuracy reached 99.1% across distorted and scanned document formats.\n- **Visual Spatial Reasoning:** Tasks requiring counting occluded blocks remain the primary failure mode for non-reasoning architectures.",
+      "category": "Reviews",
+      "tags": [
+        "Computer Vision",
+        "Reasoning Models",
+        "LLMs"
+      ],
+      "author": {
+        "name": "Dr. Sarah Vance",
+        "role": "Chief AI Research Editor",
+        "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-03T13:45:00Z",
+      "readingTime": "6 min read",
+      "image": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Visual comprehension metrics evaluated against complex technical diagrams.",
+      "isFeatured": false,
+      "isTrending": true,
+      "isDraft": false,
+      "isNews": false,
+      "views": 8900,
+      "recommendedTools": [
+        "tool-claude",
+        "tool-midjourney"
+      ]
+    },
+    {
+      "id": "art-7",
+      "title": "The Essential Guide to Small Language Models (SLMs) on Mobile & IoT Devices",
+      "slug": "guide-to-small-language-models-mobile-iot",
+      "summary": "How sub-3B parameter models are enabling real-time on-device voice transcription, contextual autocomplete, and smart home automation without internet connectivity.",
+      "content": "## The Rise of Compact Intelligence\n\nWhile massive models drive cloud intelligence, Small Language Models (SLMs) with 1 billion to 3 billion parameters are quietly redefining mobile and embedded computing.\n\n### Why Small Models Excel at Specialized Tasks\nThrough aggressive knowledge distillation, high-quality synthetic pre-training data, and pruning, a modern 2B model achieves reasoning capabilities superior to the 70B models of 2023.\n\n### Key Deployment Considerations:\n1. **Battery Drain:** Running an unquantized model can deplete 1% battery per minute; INT4 NPU kernels reduce this by 80%.\n2. **Thermal Throttling:** Sustained generation must be capped to bursts of 10-15 seconds.\n3. **Instant Responsiveness:** Zero network roundtrip enables instantaneous voice interfaces.",
+      "category": "AI Guides",
+      "tags": [
+        "Edge AI",
+        "Open Weights"
+      ],
+      "author": {
+        "name": "Elena Rostova",
+        "role": "Infrastructure & Hardware Analyst",
+        "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-02T08:30:00Z",
+      "readingTime": "5 min read",
+      "image": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Edge intelligence powering low-power mobile microprocessors.",
+      "isFeatured": false,
+      "isTrending": false,
+      "isDraft": false,
+      "isNews": false,
+      "views": 5200,
+      "recommendedTools": []
+    },
+    {
+      "id": "art-8",
+      "title": "Autonomous Software Agents in the Enterprise: Real Deployment Case Studies",
+      "slug": "autonomous-software-agents-enterprise-case-studies",
+      "summary": "Analyzing how leading tech enterprises are implementing multi-agent workflows for pull request reviews, regression triage, and automated incident response.",
+      "content": "## From Chatbots to Autonomous Co-Workers\n\nEnterprises are shifting from conversational assistants to goal-directed autonomous agents that hold specific credentials, execute shell commands, query databases, and file bug reports.\n\n### The Multi-Agent Orchestration Pattern\nInstead of one generalist agent, top engineering teams employ specialized micro-agents:\n- **Triage Agent:** Analyzes Sentry error logs and assigns severity.\n- **Diagnostic Agent:** Reproduces stack traces inside sandboxed Docker containers.\n- **Patch Agent:** Generates minimal diffs and submits pull requests with regression tests.",
+      "category": "AI News",
+      "tags": [
+        "Autonomous Agents",
+        "Enterprise"
+      ],
+      "author": {
+        "name": "Dr. Sarah Vance",
+        "role": "Chief AI Research Editor",
+        "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80"
+      },
+      "publishedAt": "2026-09-01T15:00:00Z",
+      "readingTime": "6 min read",
+      "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+      "caption": "Orchestrating autonomous software agents across enterprise infrastructure.",
+      "isFeatured": false,
+      "isTrending": true,
+      "isDraft": false,
+      "isNews": true,
+      "views": 11200,
+      "recommendedTools": [
+        "tool-cursor"
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "id": "tool-cursor",
+      "name": "Cursor Editor",
+      "slug": "cursor-editor",
+      "description": "An intelligent code editor built from VS Code with native agentic code generation, multi-file diffing, and repo indexing.",
+      "category": "AI Coding",
+      "pricing": "Freemium",
+      "websiteUrl": "https://cursor.com",
+      "reviewUrl": "/article/cursor-ai-code-editor-benchmark-review",
+      "logoUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=240&q=80",
+      "rating": 4.9,
+      "featured": true,
+      "pricingDetails": "Free tier with monthly quota, Pro at $20/mo"
+    },
+    {
+      "id": "tool-claude",
+      "name": "Claude 3.5 Sonnet",
+      "slug": "claude-3-5-sonnet",
+      "description": "Leading conversational and reasoning foundation model renowned for nuanced code analysis, system design, and artifact previews.",
+      "category": "AI Writing",
+      "pricing": "Freemium",
+      "websiteUrl": "https://anthropic.com",
+      "reviewUrl": "/article/frontier-reasoning-models-visual-synthesis-review",
+      "logoUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=240&q=80",
+      "rating": 4.95,
+      "featured": true,
+      "pricingDetails": "Free access on web, $20/mo Pro plan, API per-token"
+    },
+    {
+      "id": "tool-midjourney",
+      "name": "Midjourney v6",
+      "slug": "midjourney-v6",
+      "description": "Photorealistic generative image synthesis engine offering fine typography rendering, camera control, and stylistic consistency.",
+      "category": "AI Image",
+      "pricing": "Paid",
+      "websiteUrl": "https://midjourney.com",
+      "logoUrl": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=240&q=80",
+      "rating": 4.8,
+      "featured": true,
+      "pricingDetails": "Subscriptions start at $10/month"
+    },
+    {
+      "id": "tool-elevenlabs",
+      "name": "ElevenLabs Voice Engine",
+      "slug": "elevenlabs-voice-engine",
+      "description": "High-fidelity synthetic speech synthesis platform with emotional inflection, multi-speaker voice cloning, and low-latency streaming.",
+      "category": "AI Voice",
+      "pricing": "Freemium",
+      "websiteUrl": "https://elevenlabs.io",
+      "logoUrl": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=240&q=80",
+      "rating": 4.75,
+      "featured": false,
+      "pricingDetails": "10,000 characters free monthly, Starter from $5/mo"
+    },
+    {
+      "id": "tool-perplexity",
+      "name": "Perplexity Search",
+      "slug": "perplexity-search",
+      "description": "Conversational answer engine backed by real-time web citations, multi-source synthesis, and academic paper querying.",
+      "category": "AI Research",
+      "pricing": "Freemium",
+      "websiteUrl": "https://perplexity.ai",
+      "logoUrl": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=240&q=80",
+      "rating": 4.9,
+      "featured": true,
+      "pricingDetails": "Free unlimited basic search, Pro $20/mo"
+    },
+    {
+      "id": "tool-notion-ai",
+      "name": "Notion AI Workspace",
+      "slug": "notion-ai-workspace",
+      "description": "Integrated knowledge base companion capable of cross-database retrieval, automated summaries, and draft generation.",
+      "category": "AI Productivity",
+      "pricing": "Free Trial",
+      "websiteUrl": "https://notion.so",
+      "logoUrl": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=240&q=80",
+      "rating": 4.6,
+      "featured": false,
+      "pricingDetails": "$10 per member/month add-on"
+    }
+  ],
+  "media": [
+    {
+      "id": "med-1",
+      "title": "Neural Network Concept Visualization",
+      "filename": "neural_viz.jpg",
+      "url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+      "size": 245000,
+      "mimeType": "image/jpeg",
+      "createdAt": "2026-09-01T10:00:00Z"
+    },
+    {
+      "id": "med-2",
+      "title": "Silicon Hardware Board",
+      "filename": "silicon_board.jpg",
+      "url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+      "size": 312000,
+      "mimeType": "image/jpeg",
+      "createdAt": "2026-09-01T10:00:00Z"
+    },
+    {
+      "id": "med-3",
+      "title": "Code Editor Terminal Workspace",
+      "filename": "editor_workspace.jpg",
+      "url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
+      "size": 198000,
+      "mimeType": "image/jpeg",
+      "createdAt": "2026-09-01T10:00:00Z"
+    },
+    {
+      "id": "med-4",
+      "title": "Futuristic Network Earth Sphere",
+      "filename": "network_sphere.jpg",
+      "url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+      "size": 289000,
+      "mimeType": "image/jpeg",
+      "createdAt": "2026-09-01T10:00:00Z"
+    }
+  ],
+  "tags": [
+    {
+      "id": "tag-1",
+      "name": "LLMs",
+      "slug": "llms"
+    },
+    {
+      "id": "tag-2",
+      "name": "Autonomous Agents",
+      "slug": "autonomous-agents"
+    },
+    {
+      "id": "tag-3",
+      "name": "Open Weights",
+      "slug": "open-weights"
+    },
+    {
+      "id": "tag-4",
+      "name": "Hardware & Silicon",
+      "slug": "hardware-silicon"
+    },
+    {
+      "id": "tag-5",
+      "name": "Reasoning Models",
+      "slug": "reasoning-models"
+    },
+    {
+      "id": "tag-6",
+      "name": "Edge AI",
+      "slug": "edge-ai"
+    },
+    {
+      "id": "tag-7",
+      "name": "Computer Vision",
+      "slug": "computer-vision"
+    },
+    {
+      "id": "tag-8",
+      "name": "Enterprise",
+      "slug": "enterprise"
+    }
+  ],
+  "subscribers": [
+    {
+      "id": "sub-1",
+      "email": "reader@technews.io",
+      "createdAt": "2026-09-01T12:00:00Z"
+    }
+  ],
+  "sessions": {},
+  "settings": {
+    "siteName": "AI Tech Hub",
+    "tagline": "Frontier Intelligence & Applied AI Architecture",
+    "logoText": "AI TECH",
+    "logoSubText": "HUB",
+    "logoUrl": "",
+    "contactEmail": "editorial@aitechhub.com",
+    "contactPhone": "+1 (415) 890-4122",
+    "editorialAddress": "742 Frontier Way, Suite 400, San Francisco, CA 94107",
+    "socialLinks": {
+      "twitter": "https://twitter.com",
+      "github": "https://github.com",
+      "linkedin": "https://linkedin.com",
+      "youtube": "https://youtube.com",
+      "discord": "https://discord.com"
+    },
+    "footerBio": "An independent technology and artificial intelligence journal delivering rigorous technical analyses, breaking research breakdowns, and unbiased software evaluations.",
+    "copyrightText": "AI Tech Hub. All rights reserved.",
+    "seoTitle": "AI Tech Hub — Frontier Intelligence & AI Software Directory",
+    "seoDescription": "Leading publication covering generative AI, reasoning models, autonomous agents, and curated software benchmarking."
+  },
+  "homepage": {
+    "heroArticleId": "",
+    "featuredSectionTitle": "Featured Intelligence",
+    "featuredSectionSubtitle": "Top Editorial Picks",
+    "showTrendingTicker": true,
+    "trendingArticleIds": [],
+    "showToolsShowcase": true,
+    "toolsShowcaseTitle": "Trending Intelligence & Software Directory",
+    "featuredToolIds": [],
+    "showNewsletterBox": true
+  }
+}
