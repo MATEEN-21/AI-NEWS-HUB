@@ -1,6 +1,6 @@
 {
   "isConfigured": false,
-  "recoveryCode": "ATH-924A-C71B",
+  "recoveryCode": "ATH-486A62-A58136",
   "users": [],
   "categories": [
     {
@@ -72,7 +72,7 @@
       "isTrending": true,
       "isDraft": false,
       "isNews": true,
-      "views": 14202,
+      "views": 14204,
       "recommendedTools": [
         "tool-cursor",
         "tool-perplexity"

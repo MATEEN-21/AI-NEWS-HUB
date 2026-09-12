@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { createServer as createViteServer } from 'vite';
 import { db } from './server/db.ts';
 import type { UserProfile, SearchResultItem } from './src/types.ts';
@@ -11,10 +12,21 @@ const PORT = 3000;
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-// Serve static uploads directory
-const uploadsDir = path.resolve(process.cwd(), 'public', 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+// Serve static uploads directory with read-only fallback to /tmp
+let uploadsDir = path.resolve(process.cwd(), 'public', 'uploads');
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+} catch (e: any) {
+  uploadsDir = path.resolve(os.tmpdir(), 'ai-tech-hub-uploads');
+  try {
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+  } catch (err: any) {
+    console.warn('[Storage] Could not create uploads directory in /tmp:', err.message);
+  }
 }
 app.use('/uploads', express.static(uploadsDir));
 
@@ -59,32 +71,56 @@ app.get('/api/auth/status', (req: Request, res: Response) => {
 
 // Admin Setup endpoint (initial configuration)
 app.post('/api/auth/setup', (req: Request, res: Response) => {
-  const { email, password, confirmPassword } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Admin email and password are required.' });
-  }
+  try {
+    const { email, password, confirmPassword } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Admin email and password are required.' });
+    }
 
-  const cleanEmail = String(email).trim();
-  if (!cleanEmail.includes('@') || !cleanEmail.includes('.')) {
-    return res.status(400).json({ error: 'Please enter a valid email address.' });
-  }
+    const cleanEmail = String(email).trim();
+    if (!cleanEmail.includes('@') || !cleanEmail.includes('.')) {
+      return res.status(400).json({ error: 'Please enter a valid administrative email address.' });
+    }
 
-  if (password.length < 6) {
-    return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
-  }
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
+    }
 
-  if (confirmPassword && password !== confirmPassword) {
-    return res.status(400).json({ error: 'Passwords do not match. Please retype carefully.' });
-  }
+    if (confirmPassword && password !== confirmPassword) {
+      return res.status(400).json({ error: 'Passwords do not match. Please retype carefully.' });
+    }
 
-  const result = db.setupAdminAccount(cleanEmail, password);
-  res.status(201).json({
-    success: true,
-    user: result.user,
-    token: result.token,
-    recoveryCode: result.recoveryCode,
-    message: 'Admin account successfully configured.',
-  });
+    const currentStatus = db.getAuthStatus();
+    if (currentStatus.isConfigured && !currentStatus.requiresSetup) {
+      // Check if bearer token is provided to allow existing admin to reconfigure
+      const authHeader = req.headers.authorization;
+      let isAuthorizedAdmin = false;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const user = db.validateToken(authHeader.split(' ')[1]);
+        if (user && user.role === 'admin') isAuthorizedAdmin = true;
+      }
+
+      if (!isAuthorizedAdmin) {
+        return res.status(400).json({
+          error: 'An administrator account is already configured. Please log in or use your emergency recovery key to reset credentials.'
+        });
+      }
+    }
+
+    const result = db.setupAdminAccount(cleanEmail, password);
+    return res.status(201).json({
+      success: true,
+      user: result.user,
+      token: result.token,
+      recoveryCode: result.recoveryCode,
+      message: 'Admin account successfully configured.',
+    });
+  } catch (err: any) {
+    console.error('[Auth Setup] Failed to configure admin account:', err);
+    return res.status(500).json({
+      error: err.message || 'An unexpected error occurred while setting up the admin account.'
+    });
+  }
 });
 
 // Auth endpoints
@@ -389,22 +425,28 @@ app.post('/api/media/upload', requireAuth, (req: Request, res: Response) => {
       const buffer = Buffer.from(matches[2], 'base64');
       const ext = mimeType.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
       const safeFilename = `${Date.now()}-${(filename || 'image').replace(/[^a-zA-Z0-9_-]/g, '')}.${ext}`;
-      const filePath = path.resolve(uploadsDir, safeFilename);
+      let imageUrl = `/uploads/${safeFilename}`;
 
-      fs.writeFileSync(filePath, buffer);
+      try {
+        const filePath = path.resolve(uploadsDir, safeFilename);
+        fs.writeFileSync(filePath, buffer);
+      } catch (writeErr: any) {
+        console.warn('[Upload] Disk write failed on read-only system, using dataUrl fallback:', writeErr.message);
+        imageUrl = dataUrl;
+      }
 
       const mediaItem = db.addMedia({
         title: title || safeFilename,
         filename: safeFilename,
-        url: `/uploads/${safeFilename}`,
+        url: imageUrl,
         size: buffer.length,
         mimeType,
       });
 
       return res.status(201).json(mediaItem);
-    } catch (err) {
-      console.error('File write error:', err);
-      return res.status(500).json({ error: 'Failed to write uploaded image to disk.' });
+    } catch (err: any) {
+      console.error('File upload error:', err);
+      return res.status(500).json({ error: 'Failed to process uploaded image.' });
     }
   }
 
@@ -567,4 +609,10 @@ async function startServer() {
   });
 }
 
-startServer();
+// Start server if not running inside a serverless runtime
+if (!process.env.VERCEL && !process.env.AWS_LAMBDA_FUNCTION_NAME) {
+  startServer();
+}
+
+export default app;
+export { app };

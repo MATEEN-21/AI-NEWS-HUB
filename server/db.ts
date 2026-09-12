@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import os from 'os';
 import type { Article, AITool, Category, MediaItem, Tag, UserProfile, WebsiteSettings, HomepageConfig } from '../src/types.ts';
 
 interface StoredUser extends UserProfile {
@@ -57,9 +58,44 @@ export const defaultHomepage: HomepageConfig = {
   showNewsletterBox: true,
 };
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
-const DB_FILE = path.resolve(DATA_DIR, 'database.json');
-const UPLOADS_DIR = path.resolve(process.cwd(), 'public', 'uploads');
+const BUNDLED_DATA_DIR = path.resolve(process.cwd(), 'data');
+const BUNDLED_DB_FILE = path.resolve(BUNDLED_DATA_DIR, 'database.json');
+
+const isServerless = Boolean(
+  process.env.VERCEL ||
+  process.env.AWS_LAMBDA_FUNCTION_NAME ||
+  process.env.LAMBDA_TASK_ROOT ||
+  process.env.NETLIFY ||
+  process.env.FUNCTIONS_EMULATOR
+);
+
+function getInitialStoragePaths(): { dataDir: string; dbFile: string } {
+  if (isServerless) {
+    const tmpDataDir = path.resolve(os.tmpdir(), 'ai-tech-hub-data');
+    return {
+      dataDir: tmpDataDir,
+      dbFile: path.resolve(tmpDataDir, 'database.json'),
+    };
+  }
+
+  // In standard container / VPS environment, test if project data dir is writable
+  try {
+    if (!fs.existsSync(BUNDLED_DATA_DIR)) {
+      fs.mkdirSync(BUNDLED_DATA_DIR, { recursive: true });
+    }
+    const testFile = path.resolve(BUNDLED_DATA_DIR, `.write-check-${Date.now()}`);
+    fs.writeFileSync(testFile, 'ok');
+    fs.unlinkSync(testFile);
+    return { dataDir: BUNDLED_DATA_DIR, dbFile: BUNDLED_DB_FILE };
+  } catch {
+    // Read-only filesystem detected! Fallback to /tmp
+    const tmpDataDir = path.resolve(os.tmpdir(), 'ai-tech-hub-data');
+    return {
+      dataDir: tmpDataDir,
+      dbFile: path.resolve(tmpDataDir, 'database.json'),
+    };
+  }
+}
 
 function hashPassword(password: string, salt: string): string {
   return crypto.scryptSync(password, salt, 64).toString('hex');
@@ -526,79 +562,151 @@ const initialMedia: MediaItem[] = [
 
 class Database {
   private data: DatabaseSchema;
+  private activeDataDir: string;
+  private activeDbFile: string;
 
   constructor() {
+    const paths = getInitialStoragePaths();
+    this.activeDataDir = paths.dataDir;
+    this.activeDbFile = paths.dbFile;
     this.ensureDirs();
     this.data = this.loadData();
   }
 
   private ensureDirs() {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(UPLOADS_DIR)) {
-      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    try {
+      if (!fs.existsSync(this.activeDataDir)) {
+        fs.mkdirSync(this.activeDataDir, { recursive: true });
+      }
+    } catch (e: any) {
+      console.warn(`[Storage] Could not create directory ${this.activeDataDir}: ${e.message}. Using ${os.tmpdir()}`);
+      this.activeDataDir = os.tmpdir();
+      this.activeDbFile = path.resolve(os.tmpdir(), 'ai-tech-hub-database.json');
     }
   }
 
   private loadData(): DatabaseSchema {
-    if (fs.existsSync(DB_FILE)) {
+    let raw: string | null = null;
+
+    // 1. Try reading from activeDbFile first (e.g. /tmp/ai-tech-hub-data/database.json)
+    if (fs.existsSync(this.activeDbFile)) {
       try {
-        const raw = fs.readFileSync(DB_FILE, 'utf-8');
-        const parsed = JSON.parse(raw);
-
-        let changed = false;
-        if (!parsed.settings) {
-          parsed.settings = { ...defaultSettings };
-          changed = true;
-        }
-        if (!parsed.homepage) {
-          parsed.homepage = { ...defaultHomepage };
-          changed = true;
-        }
-        if (parsed.isConfigured === undefined) {
-          // If already has user-configured admin with non-default email, mark true, else false
-          const hasCustomAdmin = parsed.users?.some((u: StoredUser) => u.email && u.email !== 'editorial@novatechwire.com');
-          parsed.isConfigured = hasCustomAdmin;
-          changed = true;
-        }
-        if (!parsed.recoveryCode) {
-          parsed.recoveryCode = `ATH-${crypto.randomBytes(3).toString('hex').toUpperCase()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
-          changed = true;
-        }
-
-        if (changed) {
-          this.saveData(parsed);
-        }
-        return parsed;
-      } catch (err) {
-        console.error('Failed to parse database.json, reinitializing...', err);
+        raw = fs.readFileSync(this.activeDbFile, 'utf-8');
+      } catch (e: any) {
+        console.warn(`[Storage] Could not read from ${this.activeDbFile}: ${e.message}`);
       }
     }
 
-    const defaultData: DatabaseSchema = {
-      isConfigured: false,
-      recoveryCode: `ATH-${crypto.randomBytes(3).toString('hex').toUpperCase()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`,
-      users: [],
-      categories: initialCategories,
-      articles: initialArticles,
-      tools: initialTools,
-      media: initialMedia,
-      tags: initialTags,
-      subscribers: [
-        { id: 'sub-1', email: 'reader@technews.io', createdAt: '2026-09-01T12:00:00Z' }
-      ],
-      sessions: {},
-      settings: { ...defaultSettings },
-      homepage: { ...defaultHomepage },
-    };
+    // 2. If not found in activeDbFile, check bundled file in project directory (process.cwd()/data/database.json)
+    if (!raw && fs.existsSync(BUNDLED_DB_FILE)) {
+      try {
+        raw = fs.readFileSync(BUNDLED_DB_FILE, 'utf-8');
+      } catch (e: any) {
+        console.warn(`[Storage] Could not read from bundled ${BUNDLED_DB_FILE}: ${e.message}`);
+      }
+    }
 
-    this.saveData(defaultData);
-    return defaultData;
+    let parsed: DatabaseSchema | null = null;
+    if (raw) {
+      try {
+        parsed = JSON.parse(raw);
+      } catch (err: any) {
+        console.error('[Storage] Failed to parse database JSON, falling back to defaults:', err.message);
+      }
+    }
+
+    if (!parsed) {
+      parsed = {
+        isConfigured: false,
+        recoveryCode: `ATH-${crypto.randomBytes(3).toString('hex').toUpperCase()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`,
+        users: [],
+        categories: initialCategories,
+        articles: initialArticles,
+        tools: initialTools,
+        media: initialMedia,
+        tags: initialTags,
+        subscribers: [
+          { id: 'sub-1', email: 'reader@technews.io', createdAt: '2026-09-01T12:00:00Z' }
+        ],
+        sessions: {},
+        settings: { ...defaultSettings },
+        homepage: { ...defaultHomepage },
+      };
+    } else {
+      if (!parsed.settings) parsed.settings = { ...defaultSettings };
+      if (!parsed.homepage) parsed.homepage = { ...defaultHomepage };
+      if (!parsed.users) parsed.users = [];
+      if (!parsed.categories || parsed.categories.length === 0) parsed.categories = initialCategories;
+      if (!parsed.articles || parsed.articles.length === 0) parsed.articles = initialArticles;
+      if (!parsed.tools || parsed.tools.length === 0) parsed.tools = initialTools;
+      if (!parsed.media || parsed.media.length === 0) parsed.media = initialMedia;
+      if (!parsed.tags || parsed.tags.length === 0) parsed.tags = initialTags;
+      if (!parsed.subscribers) parsed.subscribers = [];
+      if (!parsed.sessions) parsed.sessions = {};
+      if (!parsed.recoveryCode) {
+        parsed.recoveryCode = `ATH-${crypto.randomBytes(3).toString('hex').toUpperCase()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
+      }
+    }
+
+    // Support environment variables ADMIN_EMAIL & ADMIN_PASSWORD (especially useful for Vercel)
+    if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+      const envEmail = process.env.ADMIN_EMAIL.toLowerCase().trim();
+      const envPass = process.env.ADMIN_PASSWORD;
+      const existing = parsed.users.find(u => u.email.toLowerCase() === envEmail);
+      if (!existing) {
+        const salt = crypto.randomBytes(16).toString('hex');
+        const passwordHash = hashPassword(envPass, salt);
+        const envAdmin: StoredUser = {
+          id: 'user-admin-env',
+          username: envEmail,
+          name: 'Site Administrator',
+          email: envEmail,
+          role: 'admin',
+          passwordHash,
+          salt,
+        };
+        parsed.users.unshift(envAdmin);
+        parsed.isConfigured = true;
+      }
+    }
+
+    // Mark isConfigured based on whether real admin users exist
+    if (!parsed.users || parsed.users.length === 0) {
+      parsed.isConfigured = false;
+    } else {
+      parsed.isConfigured = true;
+    }
+
+    // Attempt to persist initial loaded state to writable storage, but never throw if read-only
+    this.saveData(parsed);
+
+    return parsed;
   }
 
   private saveData(data: DatabaseSchema) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    this.data = data;
+
+    // 1. Try active file
+    try {
+      if (!fs.existsSync(this.activeDataDir)) {
+        fs.mkdirSync(this.activeDataDir, { recursive: true });
+      }
+      fs.writeFileSync(this.activeDbFile, JSON.stringify(data, null, 2), 'utf-8');
+      return;
+    } catch (err: any) {
+      console.warn(`[Storage] Write to ${this.activeDbFile} failed (${err.message}). Attempting fallback to ${os.tmpdir()}...`);
+    }
+
+    // 2. Fallback to os.tmpdir() directly
+    try {
+      const fallbackFile = path.resolve(os.tmpdir(), 'ai-tech-hub-database.json');
+      fs.writeFileSync(fallbackFile, JSON.stringify(data, null, 2), 'utf-8');
+      this.activeDbFile = fallbackFile;
+      this.activeDataDir = os.tmpdir();
+      return;
+    } catch (err2: any) {
+      console.warn(`[Storage] Temporary fallback write also failed (${err2.message}). State maintained safely in-memory.`);
+    }
   }
 
   public persist() {
@@ -607,7 +715,7 @@ class Database {
 
   // User & Auth
   public getAuthStatus(): { isConfigured: boolean; adminEmail?: string; requiresSetup: boolean } {
-    const configured = !!this.data.isConfigured && this.data.users.length > 0;
+    const configured = !!this.data.isConfigured && Array.isArray(this.data.users) && this.data.users.length > 0;
     return {
       isConfigured: configured,
       adminEmail: configured ? this.data.users[0]?.email : undefined,
@@ -622,7 +730,7 @@ class Database {
     const recoveryCode = `ATH-${crypto.randomBytes(3).toString('hex').toUpperCase()}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
 
     const adminUser: StoredUser = {
-      id: 'user-admin-1',
+      id: `user-admin-${Date.now()}`,
       username: cleanEmail,
       name: 'Site Administrator',
       email: cleanEmail,
